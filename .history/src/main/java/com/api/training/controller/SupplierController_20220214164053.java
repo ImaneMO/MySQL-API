@@ -3,7 +3,6 @@ package com.api.training.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.api.training.Dto.SupplierDto;
 import com.api.training.exceptionHandler.NotFoundException;
@@ -41,13 +39,8 @@ public class SupplierController {
 
 	/*Read a single supplier*/
 	@GetMapping("/supplier/{id}")
-    @Cacheable(value = "supplierCache")
 	public SupplierDto findById(@PathVariable long id) {
-		try {
-			return supplierService.findById(id);
-		}catch(NotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Supplier Not Found", e);
-		}
+		return supplierService.findById(id);
 	}
 
 	/*Add a new collaborator*/
@@ -64,8 +57,8 @@ public class SupplierController {
 
 	/*Update supplier*/
 	@PutMapping("/supplier/{id}")
-	public SupplierDto updateSupplier(@PathVariable("id") long id, @RequestBody Supplier supplier){
-		return supplierService.updateSupplier(supplier.convertToDto());
+	public ResponseEntity<SupplierDto> updateSupplier(@PathVariable("id") long id, @RequestBody Supplier supplier){
+
 	}
 
 	/*Delete supplier*/

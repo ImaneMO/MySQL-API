@@ -8,7 +8,7 @@ public class NotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String MESSAGE = "Could not find the Collaborator";
+	private static final String MESSAGE = "Could not find the supplier";
 
 	public NotFoundException(String exception) {
 		super(exception);

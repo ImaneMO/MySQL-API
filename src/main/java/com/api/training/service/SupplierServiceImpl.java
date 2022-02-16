@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.api.training.Dto.SupplierDto;
@@ -12,6 +13,9 @@ import com.api.training.exceptionHandler.NotFoundException;
 import com.api.training.model.Supplier;
 import com.api.training.repository.SupplierRepository;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
@@ -30,21 +34,24 @@ public class SupplierServiceImpl implements SupplierService {
 		for (Supplier s:suppliers) {
 			suppliersDto.add(new SupplierDto(s.getId(), s.getSuppliername(), s.getService(), 
 					s.getEmail()));
+			log.info("Supplier allocated to list");
 		}
-
 		return suppliersDto;
 	}
 
 	@Override
 	public SupplierDto findById(long theID) {
 		Optional<Supplier> supplierWanted = supplierRepository.findById(theID);
-		if(supplierWanted.isPresent()) {
-			return new SupplierDto(supplierWanted.get().getId(), 
-					supplierWanted.get().getSuppliername(), supplierWanted.get().getService(), 
+//		if(supplierWanted.isPresent()) {
+			log.debug("Supplier ID : " + theID + " wasn't found");
+			return new SupplierDto(
+					supplierWanted.get().getId(), 
+					supplierWanted.get().getSuppliername(), 
+					supplierWanted.get().getService(), 
 					supplierWanted.get().getEmail());
-		}else {
-			throw new NotFoundException();
-		}
+//		}else {
+//			throw new NotFoundException();
+//		}
 	}
 
 	@Override
